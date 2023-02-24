@@ -1,12 +1,15 @@
 import "./App.css";
+import Web3 from "web3";
 import {
-  connect,
-  accounts,
+  
+ 
   transfer,
-  sendToReceiver,
-  estimateGas,
+  sendToReceiver
+
 } from "./relayer";
 import { useEffect, useState } from "react";
+declare let window: any;
+let web3: any;
 function App() {
   const [token, setToken] = useState("");
   const [to, setTo] = useState("");
@@ -15,12 +18,23 @@ function App() {
     setToken(e.target.value);
     console.log(token);
   };
+	
+	const[accounts, setAccounts] = useState([""])
 
+ const connect = async() => {
+	if (typeof window.ethereum !== "undefined") {
+    web3 = new Web3(window.ethereum);
+    let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+	setAccounts(accounts)
+  }
+
+}
+	
   return (
     <div className="App">
       <div className="connect">
-        <button onClick={connect}>Connect </button>
-        <p>0x000000000000000000</p>
+        <button onClick={connect}>{accounts.length > 0 ? "Connected" : "Connect"} </button>
+        <p>{accounts.length > 0 ? accounts[0] : "Please connect to Metamask"}</p>
       </div>
       <form className="form">
         <label>
@@ -52,7 +66,7 @@ function App() {
         <p> Amount:</p> 
           <input type="text" onChange={(e) => setAmount(e.target.value)} />
         </label>
-        <button onClick={() => transfer(token, to, amount)}>transfer</button>
+        <button onClick={(e) => transfer(token, to, amount)}>transfer</button>
         <button onClick={sendToReceiver}>Send</button>
       </form>
     </div>
