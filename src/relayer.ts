@@ -60,7 +60,7 @@ let lastSetTimeoutId = null;
 	}));
 		if(meta_tx.length > 0){
 		 lastSetTimeoutId = window.setTimeout( sendToReceiver, 13 * 1000 );
-}
+	}
  	}catch(err){
 		console.error( "Error in getContent: %o", err );
 

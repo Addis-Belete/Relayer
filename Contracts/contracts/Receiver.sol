@@ -16,9 +16,8 @@ contract Receiver {
 	function relayer(MetaTransaction [] calldata _meta) external {
 		require(_meta.length > 0, "empty tx");
 		for(uint i; i < _meta.length; i++){
-
 			MetaTransaction memory _tx = _meta[i]; 
-			IERC20(_tx.token).transferFrom(_tx.from, _tx.to, _tx.amount);
+			require(IERC20(_tx.token).transferFrom(_tx.from, _tx.to, _tx.amount), "transfer failed");
 
 		}
 
